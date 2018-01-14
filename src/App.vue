@@ -18,12 +18,17 @@ export default {
 html, body {
   margin: 0;
   padding: 0;
+  color: #827a7a;
 }
 
 .clearfix::after {
   content: "";
   clear: both;
   display: table;
+}
+
+.content {
+  margin: 10px 80px;
 }
 
 #app {
