@@ -4,6 +4,7 @@ import Web3 from 'web3';
 import Vue from 'vue';
 
 let web3;
+const network = { blockNumber: 0, lastBlockTs: 0 };
 const account = { address: '', balance: 0 };
 const event = new Vue();
 
@@ -11,10 +12,21 @@ if (window.web3) {
   web3 = new Web3(window.web3.currentProvider);
 
   web3.eth.getBalance = promisify(web3.eth.getBalance);
+  web3.eth.getBlockNumber = promisify(web3.eth.getBlockNumber);
+  web3.eth.getBlock = promisify(web3.eth.getBlock);
 
   (async () => {
     while (web3) {
       if (web3.eth.accounts.length > 0) {
+        // update network info.
+        const blockNumber = await web3.eth.getBlockNumber();
+        if (network.blockNumber !== blockNumber) {
+          network.blockNumber = blockNumber;
+          network.lastBlockTs = Date.now();
+          event.$emit('new_block', blockNumber);
+        }
+
+        // update account info.
         if (account.address !== web3.eth.accounts[0]) {
           account.address = web3.eth.accounts[0];
           event.$emit('account_changed');
@@ -32,5 +44,5 @@ if (window.web3) {
   })();
 }
 
-export { account, event };
+export { account, network, event };
 export default web3;
