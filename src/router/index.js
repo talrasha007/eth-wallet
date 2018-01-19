@@ -9,6 +9,10 @@ export default new Router({
   routes: [
     {
       path: '/',
+      redirect: { name: 'Wallet' }
+    },
+    {
+      path: '/wallet',
       name: 'Wallet',
       component: Wallet
     },

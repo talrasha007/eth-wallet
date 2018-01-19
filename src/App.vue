@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <ul class="header clearfix">
-      <li v-bind:class="{ active: $route.path === '/' }"><a href="#/"><icon name="credit-card" class="icon" /></a>钱包</li>
+      <li v-bind:class="{ active: $route.path === '/wallet' }"><a href="#/"><icon name="credit-card" class="icon" /></a>钱包</li>
       <li v-bind:class="{ active: $route.path === '/token' }"><a href="#/token"><icon name="gg" class="icon" /></a>代币</li>
     </ul>
     <router-view />
