@@ -1,14 +1,16 @@
 <template>
   <div class="content">
-    <div class="panel">
+    <div>
       <h1>账户</h1>
       <div class="balance-box">
         <icon name="money" class="icon" />
-        <div class="balance">{{balance}}<span class="unit">ether</span></div>
-        <div class="address">{{address}}</div>
+        <div>
+          <div class="balance">{{balance}}<span class="unit">ether</span></div>
+          <div class="address">{{address}}</div>
+        </div>
       </div>
     </div>
-    <div class="panel">
+    <div class="history">
       <h1>历史</h1>
     </div>
   </div>
@@ -27,26 +29,24 @@
 </script>
 
 <style scoped lang="scss">
-  .panel {
-    box-sizing: border-box;
-    max-width: 50%;
-    min-width: 400px;
-    padding: 10px;
-    float: left;
-
+  .content {
     .balance-box {
+      margin: 10px;
       padding: 10px;
-      max-width: 400px;
+      width: 350px;
       background: white;
+      display: flex;
+      flex-flow: row wrap;
+      align-items: center;
 
       .icon {
-        width: 32px;
-        height: 46px;
-        float: left;
+        flex-basis: 32px;
+        height: 32px;
         margin-right: 10px;
       }
 
       .balance {
+        line-height: 1.4em;
         font-size: 1.3em;
 
         .unit {
