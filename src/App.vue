@@ -1,8 +1,8 @@
 <template>
   <div id="app">
-    <ul class="header clearfix">
-      <li v-bind:class="{ active: $route.path === '/wallet' }"><a href="#/"><icon name="credit-card" class="icon" /></a>钱包</li>
-      <li v-bind:class="{ active: $route.path === '/token' }"><a href="#/token"><icon name="gg" class="icon" /></a>代币</li>
+    <ul class="header">
+      <li v-bind:class="{ active: $route.path === '/wallet' }"><a href="#/wallet"><icon name="credit-card" class="icon" />钱包</a></li>
+      <li v-bind:class="{ active: $route.path === '/token' }"><a href="#/token"><icon name="gg" class="icon" />代币</a></li>
     </ul>
     <router-view />
   </div>
@@ -39,38 +39,43 @@ html, body {
 }
 </style>
 
-<style scoped>
-ul.header {
-  padding: 17px 80px 0 80px;
-  background: #f0f0f0;
-  margin: 0;
-  list-style: none;
-}
+<style scoped lang="scss">
+  ul.header {
+    padding: 17px 80px 0 80px;
+    background: #f0f0f0;
+    margin: 0;
+    list-style: none;
+    display: flex;
+    flex-flow: row wrap;
+    align-items: flex-end;
 
-ul.header li {
-  color: #0285c0;
-  text-align: center;
-  padding: 0 30px;
-  float: left;
-  border-bottom: 5px solid #f0f0f0;
-}
+    > li {
+      text-align: center;
+      padding: 0 30px;
+      border-bottom: 5px solid #f0f0f0;
 
-ul.header li a {
-  color: inherit;
-}
+      a:hover {
+        cursor: pointer;
+      }
 
-ul.header li a:hover {
-  cursor: pointer;
-}
+      a {
+        text-decoration: none;
+        color: #0285c0;
 
-ul.header li.active {
-  color: #b7a6a6;
-  border-bottom: 5px solid white;
-}
+        .icon {
+          width: 32px;
+          height: 32px;
+          display: block;
+        }
+      }
+    }
 
-ul.header li .icon {
-  width: 32px;
-  height: 32px;
-  display: block;
-}
+    > li.active {
+      border-bottom: 5px solid white;
+
+      a {
+        color: #b7a6a6;
+      }
+    }
+  }
 </style>
