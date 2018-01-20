@@ -12,6 +12,19 @@
         <button v-on:click="ttl[contract.type](contract.address, contract.amount)">提交</button>
       </div>
     </form>
+    <table>
+      <thead>
+        <tr><th>Owner</th><th>数量</th><th>创建时间</th><th>已取出</th><th>收益</th><th>修改时间</th></tr>
+      </thead>
+      <tr v-for="ticket of ttl.tickets">
+        <td>{{ticket.owner}}</td>
+        <td>{{ticket.amount}}</td>
+        <td>{{ticket.ts | moment('YYYYMMDD HH:mm')}}</td>
+        <td>{{ticket.withdraw}}</td>
+        <td>{{ticket.profit}}</td>
+        <td>{{ticket.lastModified | moment('YYYYMMDD HH:mm')}}</td>
+      </tr>
+    </table>
   </div>
 </template>
 
@@ -40,16 +53,34 @@
     },
 
     async sendProfit(profit) {
-      const tx = await instance.sendProfit(profit, Date.now() / 1000 - 3600 * 24);
+      const tx = await instance.sendProfit(profit, Date.now() / 1000);
       console.log(tx);
     },
 
     async update() {
+      const totalTickets = await instance.totalSupply();
       if (account.address) {
         Object.assign(ttl, {
-          isAdmin: account.address === await instance.admin()
+          isAdmin: account.address === await instance.admin(),
+          tickets: await ttl.getTickets(Array(totalTickets.toNumber()).fill().map((_, i) => i)),
+          myTickets: await ttl.getTickets(await instance.tokensOfOwner(account.address))
         });
       }
+    },
+
+    async getTickets(arr) {
+      const rawTickets = await Promise.all(arr.map(id => instance.tickets(id)));
+      const tickets = rawTickets.map((ticket, idx) => {
+        const [amount, ts, lastModified, withdraw, profit] = ticket.map(v => v.toNumber());
+        return { id: arr[idx], amount, ts, lastModified, withdraw, profit };
+      });
+
+      for (const ticket of tickets) {
+        console.log(ticket);
+        ticket.owner = await instance.ownerOf(ticket.id);
+      }
+
+      return tickets;
     },
 
     isAdmin: false,

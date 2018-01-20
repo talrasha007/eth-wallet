@@ -8,6 +8,9 @@ import 'vue-awesome/icons'
 import Icon from 'vue-awesome/components/Icon'
 Vue.component('icon', Icon);
 
+import moment from 'vue-moment'
+Vue.use(moment);
+
 Vue.config.productionTip = false;
 
 /* eslint-disable no-new */
