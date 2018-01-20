@@ -2,13 +2,14 @@
   <div class="content">
     <form action="javascript:void(0)" v-if="ttl.isAdmin">
       <div class="form-group">
-        <select>
-          <option selected>存入</option>
-          <option>取出</option>
+        <select v-model="contract.type">
+          <option value="create" selected>存入</option>
+          <option value="withdraw">取出</option>
+          <option value="sendProfit">收益</option>
         </select>
-        <input type="text" placeholder="地址" size="50" />
-        <input type="number" placeholder="数量" />
-        <button>提交</button>
+        <input v-model="contract.address" v-if="contract.type !== 'sendProfit'" type="text" placeholder="地址" size="50" />
+        <input v-model="contract.amount" type="number" placeholder="数量" />
+        <button v-on:click="ttl[contract.type](contract.address, contract.amount)">提交</button>
       </div>
     </form>
   </div>
@@ -26,6 +27,21 @@
         tickets: [],
         myTickets: []
       });
+    },
+
+    async create(address, amount) {
+      const tx = await instance.createTicket(address, amount);
+      console.log(tx);
+    },
+
+    async withdraw(address, amount) {
+      const tx = await instance.withdraw(address, amount);
+      console.log(tx);
+    },
+
+    async sendProfit(profit) {
+      const tx = await instance.sendProfit(profit, Date.now() / 1000 - 3600 * 24);
+      console.log(tx);
     },
 
     async update() {
@@ -54,7 +70,10 @@
     },
 
     data() {
-      return { ttl };
+      return {
+        ttl,
+        contract: { type: 'create', address: '',  amount: null }
+      };
     }
   }
 </script>

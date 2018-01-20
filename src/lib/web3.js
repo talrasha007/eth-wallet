@@ -31,6 +31,7 @@ if (window.web3) {
 
         // update account info.
         if (account.address !== web3.eth.accounts[0]) {
+          web3.eth.defaultAccount = web3.eth.accounts[0];
           account.address = web3.eth.accounts[0];
           event.$emit('account_changed');
         }
