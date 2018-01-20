@@ -12,19 +12,27 @@
         <button v-on:click="ttl[contract.type](contract.address, contract.amount)">提交</button>
       </div>
     </form>
-    <table>
-      <thead>
-        <tr><th>Owner</th><th>数量</th><th>创建时间</th><th>已取出</th><th>收益</th><th>修改时间</th></tr>
-      </thead>
-      <tr v-for="ticket of ttl.tickets">
-        <td>{{ticket.owner}}</td>
-        <td>{{ticket.amount}}</td>
-        <td>{{ticket.ts | moment('YYYYMMDD HH:mm')}}</td>
-        <td>{{ticket.withdraw}}</td>
-        <td>{{ticket.profit}}</td>
-        <td>{{ticket.lastModified | moment('YYYYMMDD HH:mm')}}</td>
-      </tr>
-    </table>
+    <div class="tickets-container">
+      <div>
+        <h4>我的票据</h4>
+        <ul class="ticket-box">
+          <li v-for="ticket of ttl.myTickets">
+            <div class="balance">${{ticket.amount}}<span>{{ticket.ts | moment('YYYY-MM-DD HH:mm')}}</span></div>
+            <div class="desc">{{ticket.lastModified | moment('YYYY-MM-DD HH:mm')}} 总收益:{{ticket.profit}} 总取出:{{ticket.withdraw}}</div>
+          </li>
+        </ul>
+      </div>
+      <div>
+        <h4>所有票据</h4>
+        <ul class="ticket-box">
+          <li v-for="ticket of ttl.tickets">
+            <div class="balance">${{ticket.amount}}<span>{{ticket.ts | moment('YYYY-MM-DD HH:mm')}}</span></div>
+            <div class="desc">{{ticket.owner}}</div>
+            <div class="desc">{{ticket.lastModified | moment('YYYY-MM-DD HH:mm')}} 总收益:${{ticket.profit}} 总取出:${{ticket.withdraw}}</div>
+          </li>
+        </ul>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -76,7 +84,6 @@
       });
 
       for (const ticket of tickets) {
-        console.log(ticket);
         ticket.owner = await instance.ownerOf(ticket.id);
       }
 
@@ -134,6 +141,42 @@
         color: white;
         padding: 10px;
         background-color: #02a8f3;
+      }
+    }
+  }
+
+  .tickets-container {
+    display: flex;
+    flex-flow: row wrap;
+
+    > div {
+      flex-grow: 1;
+
+      ul.ticket-box {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        width: 400px;
+
+        > li {
+          display: flex;
+          flex-flow: column;
+          padding: 10px;
+          margin: 10px;
+          background-color: white;
+
+          .balance {
+            font-size: 1.4em;
+            span {
+              margin-left: 10px;
+              font-size: 0.7em;
+            }
+          }
+
+          .desc {
+            font-size: 0.7em;
+          }
+        }
       }
     }
   }
