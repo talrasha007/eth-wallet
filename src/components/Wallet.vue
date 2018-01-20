@@ -6,7 +6,7 @@
         <icon name="money" class="icon" />
         <div>
           <div class="balance">{{balance}}<span class="unit">ether</span></div>
-          <div class="address">{{address}}</div>
+          <div class="address">{{address || 'loading...'}}</div>
         </div>
       </div>
     </div>
