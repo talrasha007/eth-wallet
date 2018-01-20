@@ -3,8 +3,10 @@ import promisify from 'es6-promisify';
 import Web3 from 'web3';
 import Vue from 'vue';
 
+import { fromNow } from './util';
+
 let web3;
-const network = { blockNumber: 0, lastBlockTs: 0 };
+const network = { blockNumber: 0, lastBlockTs: 0, lastBlockTsFromNow: 0 };
 const account = { address: '', balance: 0 };
 const event = new Vue();
 
@@ -25,6 +27,7 @@ if (window.web3) {
           network.lastBlockTs = Date.now();
           event.$emit('new_block', blockNumber);
         }
+        network.lastBlockTsFromNow = fromNow(network.lastBlockTs);
 
         // update account info.
         if (account.address !== web3.eth.accounts[0]) {

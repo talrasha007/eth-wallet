@@ -6,24 +6,32 @@
           <icon v-bind:name="item.icon" class="icon" />{{item.name}}
         </a>
       </li>
+      <li class="placeholder"/>
+      <li class="network">
+        <icon name="server" class="icon" />{{network.blockNumber}}&nbsp;&nbsp;
+        <icon name="clock-o" class="icon" />{{network.lastBlockTsFromNow}}
+      </li>
     </ul>
     <router-view />
   </div>
 </template>
 
 <script>
-export default {
-  name: 'app',
+  import { network } from "./lib/web3";
 
-  data() {
-    return {
-      navItems: [
-        { href: '#/wallet', icon: 'credit-card', name: '钱包' },
-        { href: '#/ttl', icon: 'gg', name: 'TTL' }
-      ]
-    };
+  export default {
+    name: 'app',
+
+    data() {
+      return {
+        network,
+        navItems: [
+          { href: '#/wallet', icon: 'credit-card', name: '钱包' },
+          { href: '#/ttl', icon: 'gg', name: 'TTL' }
+        ]
+      };
+    }
   }
-}
 </script>
 
 <style lang="scss">
@@ -87,6 +95,24 @@ html, body {
 
       a {
         color: #b7a6a6;
+      }
+    }
+
+    > li.placeholder {
+      flex-grow: 1;
+      padding: 0;
+      margin: 0;
+    }
+
+    > li.network {
+      padding-right: 0;
+      line-height: 0.9em;
+      font-size: 0.9em;
+      display: flex;
+      align-items: safe;
+
+      .icon {
+        height: 10px;
       }
     }
   }
