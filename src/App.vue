@@ -1,8 +1,11 @@
 <template>
   <div id="app">
     <ul class="header">
-      <li v-bind:class="{ active: $route.path === '/wallet' }"><a href="#/wallet"><icon name="credit-card" class="icon" />钱包</a></li>
-      <li v-bind:class="{ active: $route.path === '/token' }"><a href="#/token"><icon name="gg" class="icon" />代币</a></li>
+      <li v-for="item in navItems" v-bind:class="{ active: '#' + $route.path === item.href }">
+        <a v-bind:href="item.href">
+          <icon v-bind:name="item.icon" class="icon" />{{item.name}}
+        </a>
+      </li>
     </ul>
     <router-view />
   </div>
@@ -10,7 +13,16 @@
 
 <script>
 export default {
-  name: 'app'
+  name: 'app',
+
+  data() {
+    return {
+      navItems: [
+        { href: '#/wallet', icon: 'credit-card', name: '钱包' },
+        { href: '#/ttl', icon: 'gg', name: 'TTL' }
+      ]
+    };
+  }
 }
 </script>
 
