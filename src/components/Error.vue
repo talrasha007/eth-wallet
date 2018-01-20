@@ -18,7 +18,7 @@
     name: "error",
     data: () => ({
       metamaskInstalled: !!window.web3,
-      locked: window.web3.eth.accounts.length === 0
+      locked: !!window.web3 && window.web3.eth.accounts.length === 0
     })
   }
 </script>

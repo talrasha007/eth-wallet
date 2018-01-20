@@ -42,6 +42,8 @@ if (window.web3) {
 
     document.location.hash = '#/error';
   })();
+} else {
+  document.location.hash = '#/error';
 }
 
 export { account, network, event };
