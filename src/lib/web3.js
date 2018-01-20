@@ -6,8 +6,8 @@ import Vue from 'vue';
 import { fromNow } from './util';
 
 let web3;
-const network = { blockNumber: 0, lastBlockTs: 0, lastBlockTsFromNow: 0 };
-const account = { address: '', balance: 0 };
+const network = { blockNumber: 0, lastBlockTs: 0, lastBlockTsFromNow: '' };
+const account = { address: 'loading...', balance: 0 };
 const event = new Vue();
 
 if (window.web3) {
@@ -37,7 +37,8 @@ if (window.web3) {
 
         account.balance = 1 * web3.fromWei(await web3.eth.getBalance(account.address));
       } else {
-        document.location.hash = '#/error';
+        Object.assign(network, { blockNumber: 0, lastBlockTs: 0, lastBlockTsFromNow: '' });
+        Object.assign(account, { address: 'loading...', balance: 0 });
       }
 
       await _.sleep(1000);
