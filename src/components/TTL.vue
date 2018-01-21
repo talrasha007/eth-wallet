@@ -40,7 +40,7 @@
   import { account, event } from '@/lib/web3';
   import { loadTtl } from '@/lib/contracts';
 
-  const instance = loadTtl('0x78e481d8ee6a6dfe9bc2886880b18b030a45f89d');
+  const instance = loadTtl('0x8c92684a6d5705f8366597e68c708008c0a5cdec');
   const ttl = {
     reset() {
       Object.assign(ttl, {
@@ -60,7 +60,7 @@
       console.log(tx);
     },
 
-    async sendProfit(profit) {
+    async sendProfit(_, profit) {
       const tx = await instance.sendProfit(profit, Date.now() / 1000);
       console.log(tx);
     },
