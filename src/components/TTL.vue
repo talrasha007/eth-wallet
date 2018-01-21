@@ -32,7 +32,14 @@
           </li>
         </ul>
       </div>
-    </div>
+      <div>
+        <h4>收益历史</h4>
+        <ul class="ticket-box">
+          <li v-for="profit of ttl.profits">
+            <div class="balance">${{profit.profit | amount}}<span>{{profit.ts | moment('YYYY-MM-DD HH:mm')}}</span></div>
+          </li>
+        </ul>
+      </div>    </div>
   </div>
 </template>
 
@@ -43,6 +50,13 @@
   const instance = loadTtl('0x8c92684a6d5705f8366597e68c708008c0a5cdec');
   // const instance = loadTtl('0x073881bc873cfcdcb1879f6840b7025459d56f7f');
   instance.allEvents().watch(() => ttl.update());
+  instance.Profit({}, { fromBlock: 0, toBlock: 'latest' }).watch((err, ev) => {
+    if (!err) {
+      const { profit, ts } = ev.args;
+      ttl.profits.unshift({ profit: profit.toNumber(), ts: ts.toNumber() });
+    }
+  });
+
   const ttl = {
     async create(address, amount) {
       const tx = await instance.createTicket(address, amount);
@@ -86,6 +100,7 @@
     },
 
     isAdmin: false,
+    profits: [],
     tickets: [],
     myTickets: []
   };
@@ -104,7 +119,7 @@
 
     filters: {
       amount (value) {
-        return value / Math.pow(10, ttl.decimals);
+        return value / Math.pow(10, ttl.decimals || 4);
       }
     },
 
@@ -157,7 +172,7 @@
         list-style: none;
         padding: 0;
         margin: 0;
-        width: 400px;
+        width: 350px;
 
         > li {
           display: flex;
