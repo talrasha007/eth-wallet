@@ -9,7 +9,7 @@
         </select>
         <input v-model="contract.address" v-if="contract.type !== 'sendProfit'" type="text" placeholder="地址" size="50" />
         <input v-model="contract.amount" type="number" placeholder="数量" />
-        <button v-on:click="ttl[contract.type](contract.address, contract.amount)">提交</button>
+        <button v-on:click="ttl[contract.type](contract.address, contract.amount * Math.pow(10, ttl.decimals))">提交</button>
       </div>
     </form>
     <div class="tickets-container">
@@ -17,8 +17,8 @@
         <h4>我的票据</h4>
         <ul class="ticket-box">
           <li v-for="ticket of ttl.myTickets">
-            <div class="balance">${{ticket.amount}}<span>{{ticket.ts | moment('YYYY-MM-DD HH:mm')}}</span></div>
-            <div class="desc">{{ticket.lastModified | moment('YYYY-MM-DD HH:mm')}} 总收益:{{ticket.profit}} 总取出:{{ticket.withdraw}}</div>
+            <div class="balance">${{ticket.amount | amount}}<span>{{ticket.ts | moment('YYYY-MM-DD HH:mm')}}</span></div>
+            <div class="desc">{{ticket.lastModified | moment('YYYY-MM-DD HH:mm')}} 总收益:{{ticket.profit | amount}} 总取出:{{ticket.withdraw | amount}}</div>
           </li>
         </ul>
       </div>
@@ -26,9 +26,9 @@
         <h4>所有票据</h4>
         <ul class="ticket-box">
           <li v-for="ticket of ttl.tickets">
-            <div class="balance">${{ticket.amount}}<span>{{ticket.ts | moment('YYYY-MM-DD HH:mm')}}</span></div>
+            <div class="balance">${{ticket.amount | amount}}<span>{{ticket.ts | moment('YYYY-MM-DD HH:mm')}}</span></div>
             <div class="desc">{{ticket.owner}}</div>
-            <div class="desc">{{ticket.lastModified | moment('YYYY-MM-DD HH:mm')}} 总收益:${{ticket.profit}} 总取出:${{ticket.withdraw}}</div>
+            <div class="desc">{{ticket.lastModified | moment('YYYY-MM-DD HH:mm')}} 总收益:${{ticket.profit | amount}} 总取出:${{ticket.withdraw | amount}}</div>
           </li>
         </ul>
       </div>
@@ -45,6 +45,7 @@
     reset() {
       Object.assign(ttl, {
         isAdmin: false,
+        decimals: 4,
         tickets: [],
         myTickets: []
       });
@@ -70,6 +71,7 @@
       if (account.address) {
         Object.assign(ttl, {
           isAdmin: account.address === await instance.admin(),
+          decimals: await instance.decimals(),
           tickets: await ttl.getTickets(Array(totalTickets.toNumber()).fill().map((_, i) => i)),
           myTickets: await ttl.getTickets(await instance.tokensOfOwner(account.address))
         });
@@ -105,6 +107,12 @@
 
     async destroyed() {
       event.$off('account_changed', ttl.update);
+    },
+
+    filters: {
+      amount (value) {
+        return value / Math.pow(10, ttl.decimals);
+      }
     },
 
     data() {
