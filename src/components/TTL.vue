@@ -2,7 +2,7 @@
   <div class="content">
     <form action="javascript:void(0)" v-if="ttl.isAdmin">
       <div class="form-group">
-        <select v-model="contract.type">
+        <select v-model="contract.type" title="操作">
           <option value="create" selected>存入</option>
           <option value="withdraw">取出</option>
           <option value="sendProfit">收益</option>
@@ -42,15 +42,6 @@
 
   const instance = loadTtl('0x8c92684a6d5705f8366597e68c708008c0a5cdec');
   const ttl = {
-    reset() {
-      Object.assign(ttl, {
-        isAdmin: false,
-        decimals: 4,
-        tickets: [],
-        myTickets: []
-      });
-    },
-
     async create(address, amount) {
       const tx = await instance.createTicket(address, amount);
       console.log(tx);
@@ -79,7 +70,7 @@
     },
 
     async getTickets(arr) {
-      const rawTickets = await Promise.all(arr.map(id => instance.tickets(id)));
+      const rawTickets = await Promise.all(arr.reverse().map(id => instance.tickets(id)));
       const tickets = rawTickets.map((ticket, idx) => {
         const [amount, ts, lastModified, withdraw, profit] = ticket.map(v => v.toNumber());
         return { id: arr[idx], amount, ts, lastModified, withdraw, profit };
