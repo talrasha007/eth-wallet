@@ -41,6 +41,8 @@
   import { loadTtl } from '@/lib/contracts';
 
   const instance = loadTtl('0x8c92684a6d5705f8366597e68c708008c0a5cdec');
+  // const instance = loadTtl('0x073881bc873cfcdcb1879f6840b7025459d56f7f');
+  instance.allEvents().watch(() => ttl.update());
   const ttl = {
     async create(address, amount) {
       const tx = await instance.createTicket(address, amount);

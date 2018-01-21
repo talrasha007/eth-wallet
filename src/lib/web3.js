@@ -16,6 +16,7 @@ if (window.web3) {
   web3.eth.getBalance = promisify(web3.eth.getBalance);
   web3.eth.getBlockNumber = promisify(web3.eth.getBlockNumber);
   web3.eth.getBlock = promisify(web3.eth.getBlock);
+  web3.eth.getTransactionReceipt = promisify(web3.eth.getTransactionReceipt);
 
   (async () => {
     while (web3) {
