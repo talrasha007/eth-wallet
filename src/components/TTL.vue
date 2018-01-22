@@ -95,7 +95,7 @@
       const rawTickets = await Promise.all(arr.reverse().map(id => instance.tickets(id)));
       const tickets = rawTickets.map((ticket, idx) => {
         const [amount, ts, lastModified, withdraw, profit] = ticket.map(v => v.toNumber());
-        return { id: arr[idx], amount, ts, lastModified, withdraw, profit };
+        return { id: arr[idx] * 1, amount, ts, lastModified, withdraw, profit };
       });
 
       for (const ticket of tickets) {
