@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <ul class="header">
-      <li v-for="item in navItems" v-bind:class="{ active: '#' + $route.path === item.href }">
+      <li v-for="item in navItems" v-bind:key="item.href" v-bind:class="{ active: '#' + $route.path === item.href }">
         <a v-bind:href="item.href">
           <icon v-bind:name="item.icon" class="icon" />{{item.name}}
         </a>

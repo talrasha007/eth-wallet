@@ -16,7 +16,7 @@
       <div>
         <h4>我的票据</h4>
         <ul class="ticket-box">
-          <li v-for="ticket of ttl.myTickets">
+          <li v-for="ticket of ttl.myTickets" v-bind:key="ticket.id">
             <div class="balance">${{ticket.amount | amount}}<span>{{ticket.ts | moment('YYYY-MM-DD HH:mm')}}</span></div>
             <div class="desc">{{ticket.lastModified | moment('YYYY-MM-DD HH:mm')}} 总收益:{{ticket.profit | amount}} 总取出:{{ticket.withdraw | amount}}</div>
           </li>
@@ -25,7 +25,7 @@
       <div>
         <h4>所有票据</h4>
         <ul class="ticket-box">
-          <li v-for="ticket of ttl.tickets">
+          <li v-for="ticket of ttl.tickets" v-bind:key="ticket.id">
             <div class="balance">${{ticket.amount | amount}}<span>{{ticket.ts | moment('YYYY-MM-DD HH:mm')}}</span></div>
             <div class="desc">{{ticket.owner}}</div>
             <div class="desc">{{ticket.lastModified | moment('YYYY-MM-DD HH:mm')}} 总收益:${{ticket.profit | amount}} 总取出:${{ticket.withdraw | amount}}</div>
@@ -35,7 +35,7 @@
       <div>
         <h4>收益历史</h4>
         <ul class="ticket-box">
-          <li v-for="profit of ttl.profits">
+          <li v-for="(profit, idx) of ttl.profits" v-bind:key="idx">
             <div class="balance">${{profit.profit | amount}}<span>{{profit.ts | moment('YYYY-MM-DD HH:mm')}}</span></div>
           </li>
         </ul>
