@@ -6,7 +6,7 @@
           <icon v-bind:name="item.icon" class="icon" />{{item.name}}
         </a>
       </li>
-      <li class="placeholder"/>
+      <li class="placeholder"></li>
       <li class="network">
         <icon name="server" class="icon" />{{network.blockNumber}}&nbsp;&nbsp;
         <icon name="clock-o" class="icon" />{{network.lastBlockTsFromNow}}
