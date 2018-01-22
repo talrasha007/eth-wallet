@@ -39,7 +39,8 @@
             <div class="balance">${{profit.profit | amount}}<span>{{profit.ts | moment('YYYY-MM-DD HH:mm')}}</span></div>
           </li>
         </ul>
-      </div>    </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -47,8 +48,8 @@
   import { account, event } from '@/lib/web3';
   import { loadTtl } from '@/lib/contracts';
 
-  const instance = loadTtl('0x8c92684a6d5705f8366597e68c708008c0a5cdec');
-  // const instance = loadTtl('0x073881bc873cfcdcb1879f6840b7025459d56f7f');
+  // const instance = loadTtl('0x8c92684a6d5705f8366597e68c708008c0a5cdec'); // testrpc
+  const instance = loadTtl('0x78061ed2ba07eb7734c7674f070d0a42482da8de');
   instance.allEvents().watch(() => ttl.update());
   instance.Profit({}, { fromBlock: 0, toBlock: 'latest' }).watch((err, ev) => {
     if (!err) {
