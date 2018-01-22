@@ -48,15 +48,20 @@
   import { account, event } from '@/lib/web3';
   import { loadTtl } from '@/lib/contracts';
 
-  // const instance = loadTtl('0x8c92684a6d5705f8366597e68c708008c0a5cdec'); // testrpc
-  const instance = loadTtl('0x78061ed2ba07eb7734c7674f070d0a42482da8de');
-  instance.allEvents().watch(() => ttl.update());
-  instance.Profit({}, { fromBlock: 0, toBlock: 'latest' }).watch((err, ev) => {
-    if (!err) {
-      const { profit, ts } = ev.args;
-      ttl.profits.unshift({ profit: profit.toNumber(), ts: ts.toNumber() });
-    }
-  });
+  let instance;
+
+  try {
+    // const instance = loadTtl('0x8c92684a6d5705f8366597e68c708008c0a5cdec'); // testrpc
+    instance = loadTtl('0x78061ed2ba07eb7734c7674f070d0a42482da8de');
+    instance.allEvents().watch(() => ttl.update());
+    instance.Profit({}, { fromBlock: 0, toBlock: 'latest' }).watch((err, ev) => {
+      if (!err) {
+        const { profit, ts } = ev.args;
+        ttl.profits.unshift({ profit: profit.toNumber(), ts: ts.toNumber() });
+      }
+    });
+  } catch (e) { }
+
 
   const ttl = {
     async create(address, amount) {
