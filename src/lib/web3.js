@@ -1,9 +1,8 @@
-import _ from 'co-lodash';
 import promisify from 'es6-promisify';
 import Web3 from 'web3';
 import Vue from 'vue';
 
-import { fromNow } from './util';
+import { sleep, fromNow } from './util';
 
 let web3;
 const network = { blockNumber: 0, lastBlockTs: 0, lastBlockTsFromNow: '' };
@@ -43,7 +42,7 @@ if (window.web3) {
         Object.assign(account, { address: '', balance: 0 });
       }
 
-      await _.sleep(1000);
+      await sleep(1000);
     }
 
     document.location.hash = '#/error';

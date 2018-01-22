@@ -1,3 +1,7 @@
+export function sleep(mill) {
+  return new Promise(resolve => setTimeout(resolve,  mill));
+}
+
 export function fromNow(ts) {
   const diff = Math.round((Date.now() - ts) / 1000);
   if (diff < 60) {
