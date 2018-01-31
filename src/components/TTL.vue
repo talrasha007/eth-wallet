@@ -14,7 +14,7 @@
     </form>
     <div class="tickets-container">
       <div>
-        <h4>我的票据</h4>
+        <h4>我的票据<span>合计: ${{sum.mine | amount}}</span></h4>
         <ul class="ticket-box">
           <li v-for="ticket of ttl.myTickets" v-bind:key="ticket.id">
             <div class="balance">${{ticket.amount | amount}}<span>{{ticket.ts | moment('YYYY-MM-DD HH:mm')}}</span></div>
@@ -23,7 +23,7 @@
         </ul>
       </div>
       <div>
-        <h4>所有票据</h4>
+        <h4>所有票据<span>合计: ${{sum.all | amount}}</span></h4>
         <ul class="ticket-box">
           <li v-for="ticket of ttl.tickets" v-bind:key="ticket.id">
             <div class="balance">${{ticket.amount | amount}}<span>{{ticket.ts | moment('YYYY-MM-DD HH:mm')}}</span></div>
@@ -132,6 +132,10 @@
     data() {
       return {
         ttl,
+        sum: {
+          get all() { return ttl.tickets.map(t => t.amount).reduce((a, b) => a + b, 0) },
+          get mine() { return ttl.myTickets.map(t => t.amount).reduce((a, b) => a + b, 0) }
+        },
         contract: { type: 'create', address: '',  amount: null }
       };
     }
@@ -139,6 +143,12 @@
 </script>
 
 <style scoped lang="scss">
+  h4 > span {
+    margin-left: 1em;
+    font-weight: lighter;
+    font-size: 0.8em;
+  }
+
   form {
     margin-top: 20px;
     .form-group {
