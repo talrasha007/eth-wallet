@@ -27,7 +27,8 @@
         network,
         navItems: [
           { href: '#/wallet', icon: 'credit-card', name: '钱包' },
-          { href: '#/ttl', icon: 'gg', name: 'TTL' }
+          { href: '#/ttl', icon: 'gg', name: 'TTL' },
+          { href: '#/quotation', icon: 'line-chart', name: '行情' }
         ]
       };
     }
