@@ -17,7 +17,7 @@
 </template>
 
 <script>
-  import { network } from "./lib/web3";
+  import web3, { network } from "./lib/web3";
 
   export default {
     name: 'app',
@@ -26,10 +26,10 @@
       return {
         network,
         navItems: [
-          { href: '#/wallet', icon: 'credit-card', name: '钱包' },
-          { href: '#/ttl', icon: 'gg', name: 'TTL' },
+          web3 && { href: '#/wallet', icon: 'credit-card', name: '钱包' },
+          web3 && { href: '#/ttl', icon: 'gg', name: 'TTL' },
           { href: '#/quotation', icon: 'line-chart', name: '行情' }
-        ]
+        ].filter(v => v)
       };
     }
   }

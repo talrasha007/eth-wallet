@@ -11,7 +11,7 @@ export default new Router({
   routes: [
     {
       path: '/',
-      redirect: { name: 'wallet' }
+      redirect: { name: window.web3 ? 'wallet' : 'quotation' }
     },
     {
       path: '/wallet',
