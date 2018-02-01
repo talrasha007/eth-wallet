@@ -53,6 +53,16 @@ html, body {
   margin: 10px 80px;
 }
 
+@media only screen and (max-width:640px) {
+  .hide-mobile {
+    display:none!important;
+  }
+
+  .content {
+    margin: 10px;
+  }
+}
+
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -63,6 +73,15 @@ html, body {
 <style scoped lang="scss">
   ul.header {
     padding: 17px 80px 0 80px;
+    @media only screen and (max-width:640px) {
+      padding: 10px 10px 0 10px;
+
+      .network, .placeholder {
+        flex-basis: 0;
+        overflow: hidden;
+      }
+    }
+
     background: #f0f0f0;
     margin: 0;
     list-style: none;

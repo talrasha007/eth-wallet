@@ -5,32 +5,32 @@
       <h4>{{symbol}}</h4>
       <table v-if="quotations[symbol]">
         <thead><tr>
-          <th></th><th>卖</th><th width="30px">量</th><th>差</th><th>买</th><th width="30px">量</th><th>差</th>
+          <th></th><th>卖</th><th width="30px" class="hide-mobile">量</th><th>差</th><th>买</th><th width="30px" class="hide-mobile">量</th><th>差</th>
         </tr></thead>
         <tbody>
           <tr v-if="!!quotations[symbol].usdt">
             <td>现货</td>
             <td>{{quotations[symbol].usdt.ask[0] | price}}</td>
-            <td></td>
+            <td class="hide-mobile"></td>
             <td></td>
             <td>{{quotations[symbol].usdt.bid[0] | price}}</td>
-            <td></td>
+            <td class="hide-mobile"></td>
             <td></td>
           </tr>
 
           <tr v-for="(cval, ctype) in ctypeMap" :key="ctype" v-if="!!quotations[symbol][ctype]">
             <td>{{cval}}</td>
             <td :class="quotations[symbol][ctype] | closeClass">{{quotations[symbol][ctype].ask[0] | price}}</td>
-            <td>{{quotations[symbol][ctype].ask[1]}}</td>
+            <td class="hide-mobile">{{quotations[symbol][ctype].ask[1]}}</td>
             <td :class="quotations[symbol][ctype] | closeClass">
-              {{quotations[symbol][ctype].closeDiffRate | rate}} |
-              {{quotations[symbol][ctype].closeDiff | diff}}
+              {{quotations[symbol][ctype].closeDiffRate | rate}}
+              <span class="hide-mobile">| {{quotations[symbol][ctype].closeDiff | diff}}</span>
             </td>
             <td :class="quotations[symbol][ctype] | openClass">{{quotations[symbol][ctype].bid[0] | price}}</td>
-            <td>{{quotations[symbol][ctype].bid[1]}}</td>
+            <td class="hide-mobile">{{quotations[symbol][ctype].bid[1]}}</td>
             <td :class="quotations[symbol][ctype] | openClass">
-              {{quotations[symbol][ctype].openDiffRate | rate}} |
-              {{quotations[symbol][ctype].openDiff  | diff}}
+              {{quotations[symbol][ctype].openDiffRate | rate}}
+              <span class="hide-mobile">| {{quotations[symbol][ctype].openDiff  | diff}}</span>
             </td>
           </tr>
         </tbody>
@@ -119,13 +119,18 @@
   align-items: flex-end;
 
   .quotation-panel {
-    margin: 25px;
     flex-grow: 1;
+    @media only screen and (min-width:640px) {
+      margin: 25px;
+    }
 
     table {
       font-family: monospace;
       text-align: center;
-      min-width: 500px;
+      min-width: 100%;
+      @media only screen and (min-width:640px) {
+        min-width: 500px;
+      }
 
       .green {
         color: green;
