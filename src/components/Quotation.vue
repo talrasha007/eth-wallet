@@ -116,7 +116,7 @@
 .content {
   display: flex;
   flex-flow: row wrap;
-  align-items: flex-end;
+  align-items: flex-start;
 
   .quotation-panel {
     flex-grow: 1;
