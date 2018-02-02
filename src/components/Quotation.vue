@@ -41,7 +41,7 @@
 
 <script>
   const okEvtReg = /^ok_(.*)_(.*)_depth$/;
-  const symbols = ['eos', 'bch', 'btc', 'eth', 'etc', 'xrp', 'btg'];
+  const symbols = ['eos', 'bch', 'btc', 'eth', 'xrp', 'ltc', 'etc', 'btg'];
   const ctypeMap = {
     '0': '当周',
     '1': '次周',
