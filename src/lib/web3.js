@@ -44,11 +44,11 @@ if (window.web3) {
 
       await sleep(1000);
     }
-
-    document.location.hash = '#/error';
   })();
 } else {
-  document.location.hash = '#/error';
+  if (['', '#/quotation'].indexOf(document.location.hash) < 0) {
+    document.location.hash = '#/error';
+  }
 }
 
 export { account, network, event };

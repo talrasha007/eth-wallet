@@ -1,36 +1,36 @@
 <template>
   <div class="content">
     <div style="display: none;">{{quotations.cnt}}</div>
-    <div class="quotation-panel" v-for="symbol in symbols" v-bind:key="symbol">
+    <div class="quotation-panel" v-for="symbol in symbols" :key="symbol">
       <h4>{{symbol}}</h4>
       <table v-if="quotations[symbol]">
         <thead><tr>
-          <th></th><th>卖</th><th>量</th><th>差</th><th>买</th><th>量</th><th>差</th>
+          <th></th><th>卖</th><th width="30px" class="hide-mobile">量</th><th>差</th><th>买</th><th width="30px" class="hide-mobile">量</th><th>差</th>
         </tr></thead>
         <tbody>
           <tr v-if="!!quotations[symbol].usdt">
             <td>现货</td>
-            <td>{{quotations[symbol].usdt.ask[0]}}</td>
+            <td>{{quotations[symbol].usdt.ask[0] | price}}</td>
+            <td class="hide-mobile"></td>
             <td></td>
-            <td></td>
-            <td>{{quotations[symbol].usdt.bid[0]}}</td>
-            <td></td>
+            <td>{{quotations[symbol].usdt.bid[0] | price}}</td>
+            <td class="hide-mobile"></td>
             <td></td>
           </tr>
 
-          <tr v-for="(cval, ctype) in ctypeMap" v-bind:key="ctype" v-if="!!quotations[symbol][ctype]">
+          <tr v-for="(cval, ctype) in ctypeMap" :key="ctype" v-if="!!quotations[symbol][ctype]">
             <td>{{cval}}</td>
-            <td>{{quotations[symbol][ctype].ask[0]}}</td>
-            <td>{{quotations[symbol][ctype].ask[1]}}</td>
-            <td>
-              {{quotations[symbol][ctype].closeDiffRate | rate}} |
-              {{quotations[symbol][ctype].closeDiff | diff}}
+            <td :class="quotations[symbol][ctype] | closeClass">{{quotations[symbol][ctype].ask[0] | price}}</td>
+            <td class="hide-mobile">{{quotations[symbol][ctype].ask[1]}}</td>
+            <td :class="quotations[symbol][ctype] | closeClass">
+              {{quotations[symbol][ctype].closeDiffRate | rate}}
+              <span class="hide-mobile">| {{quotations[symbol][ctype].closeDiff | diff}}</span>
             </td>
-            <td>{{quotations[symbol][ctype].bid[0]}}</td>
-            <td>{{quotations[symbol][ctype].bid[1]}}</td>
-            <td>
-              {{quotations[symbol][ctype].openDiffRate | rate}} |
-              {{quotations[symbol][ctype].openDiff  | diff}}
+            <td :class="quotations[symbol][ctype] | openClass">{{quotations[symbol][ctype].bid[0] | price}}</td>
+            <td class="hide-mobile">{{quotations[symbol][ctype].bid[1]}}</td>
+            <td :class="quotations[symbol][ctype] | openClass">
+              {{quotations[symbol][ctype].openDiffRate | rate}}
+              <span class="hide-mobile">| {{quotations[symbol][ctype].openDiff  | diff}}</span>
             </td>
           </tr>
         </tbody>
@@ -45,7 +45,7 @@
   const ctypeMap = {
     '0': '当周',
     '1': '次周',
-    '3': '季度'
+    '2': '季度'
   };
 
   export default {
@@ -89,11 +89,24 @@
 
     filters: {
       rate(v) {
-        return v.toFixed && (v * 100).toFixed(2) + '%';
+        return v && v.toFixed && (v * 100).toFixed(2) + '%';
       },
 
       diff(v) {
-        return v.toFixed && v.toFixed(2);
+        return v && v.toFixed && v.toFixed(2);
+      },
+
+      price(v) {
+        const decimals = v > 10 ? 2 : 4;
+        return v && (v * 1).toFixed(decimals);
+      },
+
+      openClass(qc) {
+        return { red: qc.openDiff < 0, green: qc.openDiff > 0 };
+      },
+
+      closeClass(qc) {
+        return { red: qc.closeDiff < 0, green: qc.closeDiff > 0 };
       }
     }
   }
@@ -103,15 +116,29 @@
 .content {
   display: flex;
   flex-flow: row wrap;
-  align-items: flex-end;
+  align-items: flex-start;
 
   .quotation-panel {
-    margin: 50px;
     flex-grow: 1;
+    @media only screen and (min-width:640px) {
+      margin: 25px;
+    }
 
     table {
+      font-family: monospace;
       text-align: center;
-      min-width: 550px;
+      min-width: 100%;
+      @media only screen and (min-width:640px) {
+        min-width: 500px;
+      }
+
+      .green {
+        color: green;
+      }
+
+      .red {
+        color: red;
+      }
     }
   }
 }

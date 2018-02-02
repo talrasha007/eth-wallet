@@ -17,7 +17,7 @@
 </template>
 
 <script>
-  import { network } from "./lib/web3";
+  import web3, { network } from "./lib/web3";
 
   export default {
     name: 'app',
@@ -26,10 +26,10 @@
       return {
         network,
         navItems: [
-          { href: '#/wallet', icon: 'credit-card', name: '钱包' },
-          { href: '#/ttl', icon: 'gg', name: 'TTL' },
+          web3 && { href: '#/wallet', icon: 'credit-card', name: '钱包' },
+          web3 && { href: '#/ttl', icon: 'gg', name: 'TTL' },
           { href: '#/quotation', icon: 'line-chart', name: '行情' }
-        ]
+        ].filter(v => v)
       };
     }
   }
@@ -53,6 +53,16 @@ html, body {
   margin: 10px 80px;
 }
 
+@media only screen and (max-width:640px) {
+  .hide-mobile {
+    display:none!important;
+  }
+
+  .content {
+    margin: 10px;
+  }
+}
+
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -63,6 +73,15 @@ html, body {
 <style scoped lang="scss">
   ul.header {
     padding: 17px 80px 0 80px;
+    @media only screen and (max-width:640px) {
+      padding: 10px 10px 0 10px;
+
+      .network, .placeholder {
+        flex-basis: 0;
+        overflow: hidden;
+      }
+    }
+
     background: #f0f0f0;
     margin: 0;
     list-style: none;
