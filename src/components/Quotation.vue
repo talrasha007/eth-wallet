@@ -8,6 +8,22 @@
           <th></th><th>卖</th><th width="30px" class="hide-mobile">量</th><th>差</th><th>买</th><th width="30px" class="hide-mobile">量</th><th>差</th>
         </tr></thead>
         <tbody>
+          <tr v-if="!!quotations[symbol].bn">
+            <td>币安</td>
+            <td :class="quotations[symbol].bn | closeClass">{{quotations[symbol].bn.ask[0] | price}}</td>
+            <td class="hide-mobile"></td>
+            <td :class="quotations[symbol].bn | closeClass">
+              {{quotations[symbol].bn.closeDiffRate | rate}}
+              <span class="hide-mobile">| {{quotations[symbol].bn.closeDiff | diff}}</span>
+            </td>
+            <td :class="quotations[symbol].bn | openClass">{{quotations[symbol].bn.bid[0] | price}}</td>
+            <td class="hide-mobile"></td>
+            <td :class="quotations[symbol].bn | openClass">
+              {{quotations[symbol].bn.openDiffRate | rate}}
+              <span class="hide-mobile">| {{quotations[symbol].bn.openDiff  | diff}}</span>
+            </td>
+          </tr>
+
           <tr v-if="!!quotations[symbol].usdt">
             <td>现货</td>
             <td>{{quotations[symbol].usdt.ask[0] | price}}</td>
@@ -41,12 +57,23 @@
 
 <script>
   const okEvtReg = /^ok_(.*)_(.*)_depth$/;
+  const bnEvtReg = /^BN_(.*)USDT_DEPTH$/;
   const symbols = ['eos', 'bch', 'btc', 'eth', 'xrp', 'ltc', 'etc', 'btg'];
   const ctypeMap = {
     '0': '当周',
     '1': '次周',
     '2': '季度'
   };
+
+  function computeDiff(quo, qc) {
+    qc.openDiff = quo.usdt && (qc.bid[0] - quo.usdt.ask[0]);
+    qc.openDiffRate = quo.usdt && (qc.openDiff / quo.usdt.ask[0]);
+
+    qc.closeDiff = quo.usdt && (qc.ask[0] - quo.usdt.bid[0]);
+    qc.closeDiffRate = quo.usdt && (qc.closeDiff / quo.usdt.bid[0]);
+
+    return quo;
+  }
 
   export default {
     name: 'quotation',
@@ -62,13 +89,18 @@
           const [_, symbol, ctype] = okEvent;
           const quo = Object.assign({}, this.quotations[symbol]);
           const qc = quo[ctype] = { ask: msg.data.asks[4], bid: msg.data.bids[0] };
-          qc.openDiff = quo.usdt && (qc.bid[0] - quo.usdt.ask[0]);
-          qc.openDiffRate = quo.usdt && (qc.openDiff / quo.usdt.ask[0]);
 
-          qc.closeDiff = quo.usdt && (qc.ask[0] - quo.usdt.bid[0]);
-          qc.closeDiffRate = quo.usdt && (qc.closeDiff / quo.usdt.bid[0]);
+          this.quotations[symbol] = computeDiff(quo, qc);
+        }
 
-          this.quotations[symbol] = quo;
+        const bnEvent = bnEvtReg.exec(msg.event);
+        if (bnEvent) {
+          const symbol = bnEvent[1].toLowerCase();
+
+          const quo = Object.assign({}, this.quotations[symbol]);
+          const qc = quo.bn = { ask: msg.data.asks[0], bid: msg.data.bids[4] };
+
+          this.quotations[symbol] = computeDiff(quo, qc);
         }
 
         this.quotations.cnt++;
