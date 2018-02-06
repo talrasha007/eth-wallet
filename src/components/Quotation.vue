@@ -65,6 +65,12 @@
     '2': '季度'
   };
 
+  function updateDiff(quo) {
+    [0, 1, 2, 'bn'].forEach(k => {
+      quo[k] && computeDiff(quo, quo[k]);
+    });
+  }
+
   function computeDiff(quo, qc) {
     qc.openDiff = quo.usdt && (qc.bid[0] - quo.usdt.ask[0]);
     qc.openDiffRate = quo.usdt && (qc.openDiff / quo.usdt.ask[0]);
@@ -90,7 +96,12 @@
           const quo = Object.assign({}, this.quotations[symbol]);
           const qc = quo[ctype] = { ask: msg.data.asks[4], bid: msg.data.bids[0] };
 
-          this.quotations[symbol] = computeDiff(quo, qc);
+          if (ctype === 'usdt') {
+            this.quotations[symbol] = quo;
+            updateDiff(quo);
+          } else {
+            this.quotations[symbol] = computeDiff(quo, qc);
+          }
         }
 
         const bnEvent = bnEvtReg.exec(msg.event);
