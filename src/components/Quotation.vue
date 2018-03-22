@@ -85,7 +85,7 @@
     name: 'quotation',
 
     beforeCreate() {
-      this.ws = new WebSocket('ws://chain.v24.cn/depth');
+      this.ws = new WebSocket('ws://g4.i43.io/depth');
       this.quotations = { cnt: 0 };
       this.ws.addEventListener('message', msg => {
         msg = JSON.parse(msg.data);
